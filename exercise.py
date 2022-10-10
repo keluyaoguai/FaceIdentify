@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import numpy as np
 import math
 def example():
@@ -83,7 +84,7 @@ def example_坐标系对象数组():
 
     plt.show()#展示figure
 
-def hh():
+def example_donghua():
     theta = np.linspace(0, 2 * math.pi, 100)
     r = np.ones(100)
     plt.ion()#打开交互模式
@@ -105,4 +106,37 @@ def hh():
         plt.pause(1)#暂停一秒
     plt.ioff()#关闭交互模式
 
+def ex_animation():
+    fig, ax = plt.subplots()
+    y1 = []
+    tmp = []
+    for i in range(10):
+        y1.append(i)  # 每迭代一次，将i放入y1中画出来
+        temp = ax.bar(y1, height=y1, width=0.3)
+        tmp.append(temp)
+        temp = ax.plot(y1,y1)
+        tmp.append(temp)
+
+    ani = animation.ArtistAnimation(fig, tmp, interval=1, repeat_delay=1000)#将在figure中的，每次绘制的坐标系图像数组逐个播放
+    ani.save("柱状图.gif", writer='pillow')
+
+def hh():
+    x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    y = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+    fig = plt.figure()
+    # 设置画布宽高（坐标值）
+    plt.xlim(0, 11)
+    plt.ylim(0, 20)
+
+    artists = []#动画帧数组
+    # 总共10帧，每帧10个点
+    for i in range(10):
+        frame = []#帧元素数组
+        for j in range(10):
+            frame += plt.plot(x[j], y[j] + i, "o")  # 注意这里要+=，对列表操作而不是appand
+            artists.append(frame)
+    #保存为GIF
+    ani = animation.ArtistAnimation(fig=fig, artists=artists, repeat=False, interval=10)
+    ani.save('2.gif', fps=30)
 hh()

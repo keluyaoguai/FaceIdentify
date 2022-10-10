@@ -54,14 +54,16 @@ def practice_matplotlib_1():
 
 
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import numpy as np
 import math
+
 class heavenlyBodies():
     '''天体半径，轨迹半径，初始角度，公转周期，颜色'''
     def __init__(self,size,r,o,time,color):
         self.size = size*20
         self.xy = [int(r*5),o]
-        self.speed = ((2*math.pi)/time)*2
+        self.speed = ((2*math.pi)/time)
         self.color = color
 
     def move(self):
@@ -70,7 +72,7 @@ class heavenlyBodies():
         #     self.xy[1]-=2*math.pi
 
     def draw(self):
-        plt.scatter(self.xy[1],self.xy[0],self.size,self.color)
+        solar_system.scatter(self.xy[1],self.xy[0],self.size,self.color)
 def body_data():
     global body_radius
     global orbit_radius
@@ -101,24 +103,25 @@ for i in range(9):#创建天体对象
     sun_body.append(heavenlyBodies(body_radius[i],orbit_radius[i],orbit_theta[i],orbit_time[i],body_color[i]))
 
 
-
+gif_frame = []#动画帧数组
 plt.ion()
 while 1:
+    frame = []  # 帧元素数组
     plt.figure(1, (10, 10), facecolor='k')  # 打开画布
     plt.clf()
 
-    plt.subplot(projection='polar',facecolor='k')#切换坐标系为极坐标
+    solar_system=plt.subplot(projection='polar',facecolor='k')#切换坐标系为极坐标
     plt.xlim(0, 2*math.pi)#x在极坐标下控制角度
     plt.ylim(0, 900)#y在极坐标系下控制半径
-    plt.grid(False)#不显示格子
-    plt.scatter(star_x,(star_x+200),s=star_r,c='white',alpha=star_l)#显示星星
+    solar_system.grid(False)#不显示格子
+    solar_system.scatter(star_x,(star_x+200),s=star_r,c='white',alpha=star_l)#显示星星
     therta = np.linspace(0,2*math.pi)#轨道角度数据
     for i in range(9):#绘制轨道
         r = sun_body[i].xy[0]*np.ones(50)#轨道半径数据
-        plt.plot(therta, r,linewidth=1,color=body_color[i])#绘制轨道
+        solar_system.plot(therta, r,linewidth=1,color=body_color[i])#绘制轨道
     for i in range(9):
         sun_body[i].draw()#绘制天体
         sun_body[i].move()#计算天体下一位置
-    plt.pause(0.2)
+    plt.pause(0.001)
     #plt.show()#展示全部对象
 plt.ioff()
