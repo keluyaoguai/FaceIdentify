@@ -72,7 +72,10 @@ class heavenlyBodies():
         #     self.xy[1]-=2*math.pi
 
     def draw(self):
-        solar_system.scatter(self.xy[1],self.xy[0],self.size,self.color)
+        solar_system.scatter(self.xy[1],self.xy[0],self.size,self.color)#绘制天体
+        r = sun_body[i].xy[0] * np.ones(50)  # 轨道半径数据
+        solar_system.plot(therta, r,linewidth=1,color=body_color[i])#绘制轨道
+        solar_system.scatter(star_x, (star_x + 200), s=star_r, c='white', alpha=star_l)  # 显示星星
 def body_data():
     global body_radius
     global orbit_radius
@@ -114,14 +117,9 @@ while 1:
     plt.xlim(0, 2*math.pi)#x在极坐标下控制角度
     plt.ylim(0, 900)#y在极坐标系下控制半径
     solar_system.grid(False)#不显示格子
-    solar_system.scatter(star_x,(star_x+200),s=star_r,c='white',alpha=star_l)#显示星星
     therta = np.linspace(0,2*math.pi)#轨道角度数据
-    for i in range(9):#绘制轨道
-        r = sun_body[i].xy[0]*np.ones(50)#轨道半径数据
-        solar_system.plot(therta, r,linewidth=1,color=body_color[i])#绘制轨道
     for i in range(9):
         sun_body[i].draw()#绘制天体
         sun_body[i].move()#计算天体下一位置
     plt.pause(0.001)
-    #plt.show()#展示全部对象
 plt.ioff()
