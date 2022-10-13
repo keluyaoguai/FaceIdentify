@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 import math
+import imageio
 def example():
     plt.figure()
     theta = np.linspace(0,2*math.pi,100)
@@ -120,7 +121,7 @@ def ex_animation():
     ani = animation.ArtistAnimation(fig, tmp, interval=1, repeat_delay=1000)#将在figure中的，每次绘制的坐标系图像数组逐个播放
     ani.save("柱状图.gif", writer='pillow')
 
-def hh():
+def ex_gif2():
     x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     y = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -139,4 +140,26 @@ def hh():
     #保存为GIF
     ani = animation.ArtistAnimation(fig=fig, artists=artists, repeat=False, interval=10)
     ani.save('2.gif', fps=30)
+
+def example_imageio():
+
+    fig = plt.figure(figsize=(5,5))
+    for i in range(0,40):
+        x = np.linspace(0,10,100)
+        y = 10*np.sin(i*np.pi/10)*np.sin(x)
+        plt.clf()
+        plt.xlim((0,2*np.pi))
+        plt.ylim((-12,12))
+        plt.plot(x,y,color='r')
+        plt.savefig(r"D:/PyCharm Community Edition 2022.2.2/Z-code/FaceIdentify/image/"+"figure"+str(i)+".jpg")#路径尾/image/要加一个/不然最后的一段会被识别为文件名
+    gif_images = []
+    for i in range(0,40):
+        gif_images.append(imageio.imread(r"D:/PyCharm Community Edition 2022.2.2/Z-code/FaceIdentify/image/"+"figure"+str(i)+".jpg"))
+        imageio.mimsave('GIF.gif',gif_images,fps =20)
+
+def hh():
+    gif_frame = []
+    for i in range(0, 200):
+        gif_frame.append(imageio.imread(r"D:/PyCharm Community Edition 2022.2.2/Z-code/FaceIdentify/image_2/" + "figure" + str(i) + ".jpg"))
+        imageio.mimsave("solarSystem_2.gif", gif_frame, fps=15)
 hh()

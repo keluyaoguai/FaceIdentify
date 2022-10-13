@@ -57,6 +57,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 import math
+import imageio
 
 class heavenlyBodies():
     '''天体半径，轨迹半径，初始角度，公转周期，颜色'''
@@ -72,10 +73,16 @@ class heavenlyBodies():
         #     self.xy[1]-=2*math.pi
 
     def draw(self):
-        solar_system.scatter(self.xy[1],self.xy[0],self.size,self.color)#绘制天体
-        r = sun_body[i].xy[0] * np.ones(50)  # 轨道半径数据
-        solar_system.plot(therta, r,linewidth=1,color=body_color[i])#绘制轨道
+        action = [1,2,3]
+        #action[0] = solar_system.scatter(self.xy[1],self.xy[0],self.size,self.color)#绘制天体
+        solar_system.scatter(self.xy[1], self.xy[0], self.size, self.color)  # 绘制天体
+        r = self.xy[0] * np.ones(50)  # 轨道半径数据
+        therta = np.linspace(0, 2 * math.pi,50)  # 轨道角度数据
+        #action[1] = solar_system.plot(therta, r,linewidth=1,color=body_color[i])#绘制轨道
+        solar_system.plot(therta, r, linewidth=1, color=self.color)  # 绘制轨道
+        #action[2] = solar_system.scatter(star_x, (star_x + 200), s=star_r, c='white', alpha=star_l)  # 显示星星
         solar_system.scatter(star_x, (star_x + 200), s=star_r, c='white', alpha=star_l)  # 显示星星
+        #return action
 def body_data():
     global body_radius
     global orbit_radius
@@ -99,27 +106,43 @@ def body_data():
     star_x = 2000*np.random.rand(1000)
     star_r = np.random.rand(1000)
     star_l = np.random.rand(1000)
-body_data()#导入数据
 
+#导入数据
+body_data()
+#创建天体对象
 sun_body = []
-for i in range(9):#创建天体对象
+for i in range(9):
     sun_body.append(heavenlyBodies(body_radius[i],orbit_radius[i],orbit_theta[i],orbit_time[i],body_color[i]))
+#动画帧list
+gif_frame = []
+#开启交互模式
+#plt.ion()
+#一帧图的绘制
 
-
-gif_frame = []#动画帧数组
-plt.ion()
-while 1:
-    frame = []  # 帧元素数组
-    plt.figure(1, (10, 10), facecolor='k')  # 打开画布
+figure_num = 200
+for i in range(figure_num):
+    frame = []  # 帧元素list
+    fig = plt.figure(1, (10, 10), facecolor='k')  # 打开画布 #方法的前的等号不会使方法失效
     plt.clf()
-
-    solar_system=plt.subplot(projection='polar',facecolor='k')#切换坐标系为极坐标
-    plt.xlim(0, 2*math.pi)#x在极坐标下控制角度
-    plt.ylim(0, 900)#y在极坐标系下控制半径
-    solar_system.grid(False)#不显示格子
-    therta = np.linspace(0,2*math.pi)#轨道角度数据
-    for i in range(9):
-        sun_body[i].draw()#绘制天体
-        sun_body[i].move()#计算天体下一位置
-    plt.pause(0.001)
-plt.ioff()
+    #plt.cla()
+    solar_system = plt.subplot(projection='polar', facecolor='k')  # 切换坐标系为极坐标
+    plt.xlim(0, 2 * math.pi)  # x在极坐标下控制角度
+    plt.ylim(0, 900)  # y在极坐标系下控制半径
+    plt.yticks([])#不显示半径数值
+    solar_system.grid(False)  # 不显示格子
+    for j in range(9):
+        #frame += sun_body[j].draw()#绘制天体
+        sun_body[j].draw()  # 绘制天体
+        sun_body[j].move()#计算天体下一位置
+    #gif_frame.append(frame)
+    #plt.pause(0.001)
+    plt.savefig(r"D:/PyCharm Community Edition 2022.2.2/Z-code/FaceIdentify/image_2/" + "figure" + str(i) + ".jpg")
+#关闭交互模式
+#plt.ioff()
+#imageio制作gif
+for i in range(0,figure_num):
+    gif_frame.append(imageio.imread(r"D:/PyCharm Community Edition 2022.2.2/Z-code/FaceIdentify/image_2/"+"figure"+str(i)+".jpg"))
+    imageio.mimsave('solarSystem.gif',gif_frame,fps=15)
+#animation制作gif
+#ani = animation.ArtistAnimation(fig=fig, artists=gif_frame, repeat=True, interval=10)
+#ani.save('3.gif')
