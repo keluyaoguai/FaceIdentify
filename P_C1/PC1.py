@@ -52,7 +52,7 @@ import cv2 as cv
 # cv.destroyAllWindows()
 #测试结束，这段代码有错误待查找
 
-#下面是查找过程 220:280, 270:330
+# #下面是查找过程 220:280, 270:330
 # img = cv.imread('messi5.jpg')
 # ball = img[60:120, 170:230]
 # # print(img.shape)
@@ -63,7 +63,7 @@ import cv2 as cv
 # cv.imshow('image',img)
 # cv.waitKey(0)
 # cv.destroyAllWindows()
-#查找结束
+# 查找结束
 
 #Splitting and Merging Image Channels
 # img = cv.imread('messi5.jpg')
@@ -76,26 +76,27 @@ import cv2 as cv
 # cv.destroyAllWindows()
 
 #代码结束
-image=cv.imread('photo.jpg')
-image = cv.resize(image,None,fx=0.5,fy=0.5)
-hsv = cv.cvtColor(image,cv.COLOR_BGR2HSV)
-lower_red = np.array([80,70,150])
-upper_red = np.array([150,255,255])
-heibai = cv.inRange(hsv, lower_red, upper_red)
-k=np.ones((5,5),np.uint8)
-r=cv.morphologyEx(heibai,cv.MORPH_CLOSE,k)
-cv.imshow('image',image)
-#颜色替换
-rows,cols,channels = image.shape
-for i in range(rows):
-  for j in range(cols):
-    if r[i,j]==255: # 像素点为255表示的是白色，我们就是要将白色处的像素点，替换为红色
-      image[i,j]=(0,0,255) # 此处替换颜色，为BGR通道，不是RGB通道
-# #新图显示
-cv.imshow('red',image)
-cv.imshow('hsv',hsv)
-cv.imshow('heibai',heibai)
-cv.imshow('r',r)
-cv.waitKey(0)
-cv.destroyAllWindows()
-#程序演示结束
+
+# image=cv.imread('test.jpg')
+# image = cv.resize(image,None,fx=0.5,fy=0.5)
+# hsv = cv.cvtColor(image,cv.COLOR_BGR2HSV)
+# lower_red = np.array([80,70,150])
+# upper_red = np.array([150,255,255])
+# heibai = cv.inRange(hsv, lower_red, upper_red)
+# k=np.ones((5,5),np.uint8)
+# r=cv.morphologyEx(heibai,cv.MORPH_CLOSE,k)
+# cv.imshow('image',image)
+# #颜色替换
+# rows,cols,channels = image.shape
+# for i in range(rows):
+#   for j in range(cols):
+#     if r[i,j]==255: # 像素点为255表示的是白色，我们就是要将白色处的像素点，替换为红色
+#       image[i,j]=(0,0,255) # 此处替换颜色，为BGR通道，不是RGB通道
+# # #新图显示
+# cv.imshow('red',image)
+# cv.imshow('hsv',hsv)
+# cv.imshow('heibai',heibai)
+# cv.imshow('r',r)
+# cv.waitKey(0)
+# cv.destroyAllWindows()
+# #程序演示结束

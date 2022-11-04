@@ -419,6 +419,31 @@ def 图片区域挪移和交换():
     cv.imshow('image', img)
     cv.waitKey(0)
     cv.destroyAllWindows()
+def MOG2背景分离():
+    cap = cv.VideoCapture('E:/视频/假面骑士/帝骑-decade/15.mkv')
+    fgbg = cv.createBackgroundSubtractorMOG2()
+    while (1):
+        ret, frame = cap.read()
+        fgmask = fgbg.apply(frame)
+        cv.imshow('frame', fgmask)
+        k = cv.waitKey(100) & 0xff
+        if k == 27:
+            break
+    cap.release()
+    cv.destroyAllWindows()
+def KNN背景分离():
+    #似乎只能用于动态的图
+    cap = cv.VideoCapture(0)
+    fgbg = cv.createBackgroundSubtractorKNN()
+    while (1):
+        ret, frame = cap.read()
+        fgmask = fgbg.apply(frame)
+        cv.imshow('frame', fgmask)
+        k = cv.waitKey(100) & 0xff
+        if k == 27:
+            break
+    cap.release()
+    cv.destroyAllWindows()
 def hh():
     pass
 hh()
