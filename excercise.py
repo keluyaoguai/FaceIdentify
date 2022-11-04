@@ -1,8 +1,15 @@
+import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 import math
 import imageio
+import requests
+import re
+from lxml import etree
+import os
+import urllib.parse
+import cv2 as cv
 def example():
     plt.figure()
     theta = np.linspace(0,2*math.pi,100)
@@ -261,9 +268,157 @@ def 文件夹创建():
             print
             "---  There is this folder!  ---"
     folder_creat(savePath)
-def hh():
+def 中文转网址编码():
     import urllib.parse
     s = "斗罗"
     u= urllib.parse.quote(s)
     print(u)
+def 文件操作():
+    log = open('E:/spider_file/log.txt', mode='a')
+    for i in range(5):
+        logs = '_下载完成' + '^' + str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
+        print(logs)
+        log.write(logs+'\n')
+    log.close()
+def 爬虫作者名称():
+    searchResult = 'http://downnovel.com/search.htm?keyword=' + '%E6%96%97%E7%BD%97' + '&pn=1'
+    novel_namePath = '//*[@class="book_textList2 bd"]/li/a/text()'  # 该关键词搜索内容的小说名
+    writer_namePath = '//*[@class="book_textList2 bd"]/li/text()'
+
+    #下载网页数据
+    thePage = requests.get(searchResult)#该对象储存着该网页的所有内容
+    the_page = etree.HTML(thePage.text)  # 将html内的文本转码存至pages？大概
+    #提取内容
+    novel_urlPath = '//*[@class="book_textList2 bd"]/li/a/@href'  # 该关键词搜索内容的novel_url
+        #xpath方法生成的变量确实是list格式，可以用list的方法操作
+    novel_nameList = the_page.xpath(novel_namePath)#这里是一页内小说的名字的列表
+    writer_nameList = the_page.xpath(writer_namePath)#这里是一页内作者名字的列表
+    novel_urlList = the_page.xpath(novel_urlPath)#这里是一页内小说的网址的列表
+    for each in writer_nameList:
+        if '斗罗' in each:
+            print(each)
+
+def 字符串裁剪():
+    import unicodedata
+    s = '\u3000/\u3000神流\u3000'
+    unicodedata.normalize('NFKC', s)
+    s = s[3:-1]
+    print(s)
+def cvtcolor_flag参数测试():
+    import cv2 as cv
+    image = []
+    image2 = []
+    for i in range(-1,5):
+        image.append(cv.imread("D:\\PyCharm Community Edition 2022.2.2\\Z-code\\FaceIdentify\\FaceIdentify/the1.jpg", i))
+        #image2.append(cv.resize(image[i+1], (300, 300)))
+    for i in range(0, 6):
+        cv.imshow(str(i - 1), image[i])
+        #cv.imshow(str(i-1),image2[i])
+    # image = cv.imread("D:\\PyCharm Community Edition 2022.2.2\\Z-code\\FaceIdentify\\FaceIdentify/ph1.jpg", 1)
+    # image2 = cv.resize(image,(300,300))
+    # cv.imshow('ti', image2)
+    # 等待
+    cv.waitKey(0)
+    # 释放内存
+    cv.destroyAllWindows()
+def 分阶二值化测试():
+    im = cv.imread("D:\\PyCharm Community Edition 2022.2.2\\Z-code\\FaceIdentify\\FaceIdentify/ph1.jpg")
+    img = cv.resize(im,None,fx=0.4,fy=0.4)
+    hsv = cv.cvtColor(img,cv.COLOR_RGB2HSV)
+
+    lower_red = np.array([40, 10, 90])
+    upper_red = np.array([107, 255, 255])
+    heibai = cv.inRange(hsv, lower_red, upper_red)
+    cv.imshow('heibai',heibai)
+    # 等待
+    cv.waitKey(0)
+    # 释放内存
+    cv.destroyAllWindows()
+def 腐蚀膨胀测试():
+    im = cv.imread("D:\\PyCharm Community Edition 2022.2.2\\Z-code\\FaceIdentify\\FaceIdentify/ph1.jpg")
+    img = cv.resize(im, None, fx=0.4, fy=0.4)
+    cv.imshow('img', img)
+
+    # 2. cv2.MORPH_OPEN 先进行腐蚀操作，再进行膨胀操作
+    for i in range(5):
+        kernel = np.ones((5, 5), np.uint8)
+        opening = cv.morphologyEx(img, cv.MORPH_OPEN, kernel)
+    cv.imshow('opening', opening)
+
+    # 3. cv2.MORPH_CLOSE 先进行膨胀，再进行腐蚀操作
+    for i in range(10):
+        kernel = np.ones((5, 5), np.uint8)
+        closing = cv.morphologyEx(img, cv.MORPH_CLOSE, kernel)
+    cv.imshow('closing', closing)
+
+    cv.waitKey(0)
+    # 释放内存
+    cv.destroyAllWindows()
+def 边沿检测测试():
+    import cv2
+    import numpy as np
+
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
+    cap.open(0)
+
+    while cap.isOpened():
+        flag, frame = cap.read()
+        if not flag:
+            break
+        key_pressed = cv2.waitKey(60)
+        print('键盘上输入的是', key_pressed)
+        frame = cv2.resize(frame, (600, 600))
+
+        frame = cv2.Canny(frame, 100, 200)#
+
+        #frame = np.dstack((frame, frame, frame))
+
+        #rows, cols = frame.shape
+        # for i in range(rows):
+        #     for j in range(cols):
+        #         if frame[i, j] == 255:  # 像素点为255表示的是白色，我们就是要将白色处的像素点，替换为红色
+        #             frame[i, j] = (0)  # 此处替换颜色，为BGR通道，不是RGB通道
+        #         elif frame[i, j] == 0:
+        #             frame[i, j] = (255)
+
+        cv2.imshow('my computer', frame)
+
+        if key_pressed == 27:
+            break
+
+    cap.release()
+
+    cv2.destroyAllWindows()
+def 单三通道图片混合():
+    #可知opencv中图片以np数组形式存在，灰度图为二维数组，三通道图为三维数组，第三维是RGB三个数
+    image1 = cv.imread('FaceIdentify/ph5.jpg',0)
+    #image1 = cv.imread('FaceIdentify/ph5.jpg', 1)
+    image1 = cv.resize(image1, (400,400))
+    image2 = cv.imread('FaceIdentify/ph6.jpg',0)
+    #image2 = cv.imread('FaceIdentify/ph6.jpg', 1)
+    image2 = cv.resize(image2,(400,400))
+    for i in range(0,400):
+        for j in range(0, 400):
+            image1[i, j] = image1[i, j] + image2[i, j]
+            #for k in range(0,3):
+                #image1[i,j,k] = image1[i,j,k]+ image2[i,j,k]
+
+    cv.imshow('W',image1)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+def 图片区域挪移和交换():
+    img = cv.imread('FaceIdentify/the1.jpg')
+    img = cv.resize(img,(400,400))
+    print(img.shape)
+    grass = img[200:300, 50:100]
+    bess = img[200:300, 150:200]
+    img[200:300, 50:100] = bess
+    img[200:300, 150:200] = grass#？为什么无法实现交换，只能挪移，是因为只能操作一次还是什么
+    cv.namedWindow("image", cv.WINDOW_AUTOSIZE)
+    cv.imshow('image', img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+def hh():
+    pass
 hh()
