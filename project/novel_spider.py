@@ -10,7 +10,8 @@ import unicodedata
 #控制搜索内容
 key_word = input("请输入小说关键词\n")
 #是否允许关键词在作者名中
-writer_if = int(input('是否允许作者名存在关键字|1/0\n'))
+#writer_if = int(input('是否允许作者名存在关键字|1/0\n'))
+writer_if = 0
 #控制下载页数
 start_page = int(input("请输入开始页数\n"))
 #控制开始位置
@@ -54,6 +55,7 @@ def save_data(url,savePath,nname,wname,type):
     f.write(data)
     f.close()
 def download(nname,wname,url,itsPage,itsOrdinal):
+    wname = wname.replace('?','_')
     global howMany
     thisNovel = theUrl + url  # 小说网址
     # print(thisNovel)
@@ -121,4 +123,5 @@ print('关键词：'+key_word+'_下载完成')
 #添加重复书名但作者不同的功能（通过文件名加作者名实现）|完成
 #添加日志功能，记录已下载小说的书名及下载时间以及完成页数|完成
 #添加超时重启功能(检测时间，检测当前位置，重启)|
+#删除作者名中的非法词汇|（？）完成
 

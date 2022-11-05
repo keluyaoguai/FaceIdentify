@@ -444,6 +444,95 @@ def KNN背景分离():
             break
     cap.release()
     cv.destroyAllWindows()
-def hh():
-    pass
+def 字符串置换():
+    str = '?tii?dd'
+    str1 = "nimad"
+    str = str.replace('?','_')
+    print(str)
+path = 'FaceIdentify/ph1.jpg'
+def 高斯模糊与前景分割():
+    import cv2
+    import numpy as np
+    import math
+
+    # 加高斯噪声
+    def clamp(pv):
+        if pv > 255:
+            return 255
+        if pv < 0:
+            return 0
+        else:
+            return pv
+
+    def gaussian_noise(image):
+        h, w, c = image.shape
+        for row in range(h):
+            for col in range(w):
+                s = np.random.normal(0, 25, 3)  # 产生随机数，每次产生三个
+                b = image[row, col, 0]  # blue
+                g = image[row, col, 1]  # green
+                r = image[row, col, 2]  # red
+                image[row, col, 0] = clamp(b + s[0])
+                image[row, col, 1] = clamp(g + s[1])
+                image[row, col, 2] = clamp(r + s[2])
+        cv2.imshow("noise_image", image)
+        #cv2.imwrite('noise.png', image)
+
+    src = cv2.imread(path)
+    cv2.imshow('input_image', src)
+
+    # 高斯模糊
+    gaussian_noise(src)
+    dst = cv2.GaussianBlur(src, (5, 5), 0)
+    cv2.imshow("Gaussian_Blur", dst)
+    #cv2.imwrite('Gaussian_Blur.png', dst)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    # 计算峰值信噪比
+    def psnr(img1, img2):
+        mse = np.mean((img1 / 255. - img2 / 255.) ** 2)
+        if mse < 1.0e-10:
+            return 100
+        PIXEL_MAX = 1
+        return 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
+
+    ori_img = cv2.imread(path)
+    den_img = cv2.imread('Gaussian_Blur.png')
+    print(psnr(ori_img, den_img))
+
+    # 基于Grabcut算法的前景分割
+    src = cv2.imread("Gaussian_Blur.png")
+    src = cv2.resize(src, (0, 0), fx=0.5, fy=0.5)
+    r = cv2.selectROI('input', src, False)  # 返回 (x_min, y_min, w, h)
+
+    roi = src[int(r[1]):int(r[1] + r[3]), int(r[0]):int(r[0] + r[2])]  # roi区域
+    mask = np.zeros(src.shape[:2], dtype=np.uint8)  # 原图mask
+    rect = (int(r[0]), int(r[1]), int(r[2]), int(r[3]))  # 矩形roi
+
+    bgdmodel = np.zeros((1, 65), np.float64)  # bg模型的临时数组
+    fgdmodel = np.zeros((1, 65), np.float64)  # fg模型的临时数组
+
+    cv2.grabCut(src, mask, rect, bgdmodel, fgdmodel, 11, mode=cv2.GC_INIT_WITH_RECT)
+    mask2 = np.where((mask == 1) + (mask == 3), 255, 0).astype('uint8')  # 提取前景和可能的前景区域
+
+    result = cv2.bitwise_and(src, src, mask=mask2)
+    #cv2.imwrite('forward.png', result)
+    cv2.imshow("forard", result)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+def 高斯模糊():
+    import numpy as np
+    import cv2
+    img = cv2.imread(path)
+    img = cv2.resize(img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_CUBIC)  # 调整图片大小
+    cv2.imshow('Original', img)
+
+    blur_image = cv2.GaussianBlur(img, (99, 99), 0)  # (5, 5)表示高斯矩阵的长与宽都是5，标准差取0
+
+    cv2.imshow('Blurred Image', blur_image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 hh()
