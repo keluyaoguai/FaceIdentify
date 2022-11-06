@@ -56,6 +56,7 @@ def save_data(url,savePath,nname,wname,type):
     f.close()
 def download(nname,wname,url,itsPage,itsOrdinal):
     wname = wname.replace('?','_')
+    nname = nname.replace('?', '_')
     global howMany
     thisNovel = theUrl + url  # 小说网址
     # print(thisNovel)
