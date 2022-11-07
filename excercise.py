@@ -535,4 +535,6 @@ def 高斯模糊():
     cv2.imshow('Blurred Image', blur_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+def hh():
+    pass
 hh()
