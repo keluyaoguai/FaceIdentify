@@ -102,7 +102,7 @@ for i in range(start_page,pagenum+1):#爬全部页数的
     itsOrdinal = 1#在第一页可能不准
     for nname, wname,url in zip(novel_nameList,writer_nameList, novel_urlList):
         unicodedata.normalize('NFKC', wname)
-        wname = wname[3:-1]
+        wname = wname[3:-1]#去掉前三个以及最后一个字符
         if start_ordinal ==1:
             if writer_if ==1:
                 download(nname,wname,url,i,itsOrdinal)
